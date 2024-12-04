@@ -1,0 +1,151 @@
+
+TRABAJO INTEGRADOR: TICKETERA
+
+Se ha pedido crear un módulo para generar ticktes que contenga lo siguiente:
+Un menú con 3 opciones - 1) Alta ticket , 2) Leer ticket , 3) Salir. 
+
+Alta ticket : Nombre, Sector, Asunto, Problema.
+	Al terminar de ingresar el ticket se debera mostrar por pantalla el mismo, sumandose el número de ticket (que será 	un número random entre 1000,9999) y una leyenda que pida acordarse del número.
+
+	Un menú que nos pregunte si deseamos crear otro ticket, en caso de ser no, que nos regrese al menú principal, de lo 	contrario que nos regrese a la pantalla de alta.
+
+Leer ticket: número ticket 
+	Al ingresar el número nos mostrará por pantalla el ticket almacenado.
+ 	
+	Debajo del mismo aparece una leyenda que nos preguntara si deseamos leer otro ticket, teniendo la funcionalidad 		similar a la anteriormente mensionada.
+
+Salir : el programa finaliza y se cierra pidiendonos una confirmacion.
+
+´´´
+ESTRUCTURA DEL PROGRAMA:
+
+1) Menú Principal:
+
+	Presentar las opciones: Alta de ticket, Leer ticket, y Salir.
+
+	Controlar el flujo de acuerdo con la elección del usuario.
+
+2) Alta de Ticket:
+
+	Solicitar los datos: Nombre, Sector, Asunto, Problema.
+
+	Generar un número de ticket aleatorio entre 1000 y 9999.
+
+	Almacenar el ticket en un diccionario o estructura similar.
+
+	Mostrar el ticket generado.
+
+	Preguntar si se desea registrar otro ticket o regresar al menú principal.
+
+3) Leer Ticket:
+
+	Solicitar el número del ticket.
+
+	Buscar el ticket en los datos almacenados.
+
+	Mostrar el ticket correspondiente.
+
+	Preguntar si se desea leer otro ticket o regresar al menú principal.
+
+4) Salir:
+
+	Confirmar la salida antes de cerrar el programa.
+'''
+
+CODIGO:
+
+
+import random
+
+# Estructura para almacenar los tickets
+tickets = {}
+
+def menu_principal():
+    """Despliega el menú principal y gestiona la navegación."""
+    while True:
+        print("\n--- Menú Principal ---")
+        print("1. Alta Ticket")
+        print("2. Leer Ticket")
+        print("3. Salir")
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            alta_ticket()
+        elif opcion == "2":
+            leer_ticket()
+        elif opcion == "3":
+            if confirmar_salida():
+                print("Gracias por usar el sistema. ¡Adiós!")
+                break
+        else:
+            print("Opción inválida. Intente de nuevo.")
+
+def alta_ticket():
+    """Crea un nuevo ticket y lo almacena."""
+    while True:
+        print("\n--- Alta de Ticket ---")
+        nombre = input("Nombre: ")
+        sector = input("Sector: ")
+        asunto = input("Asunto: ")
+        problema = input("Problema: ")
+        
+        # Generar un número de ticket único
+        numero_ticket = random.randint(1000, 9999)
+        while numero_ticket in tickets:
+            numero_ticket = random.randint(1000, 9999)
+        
+        # Almacenar el ticket
+        tickets[numero_ticket] = {
+            "Nombre": nombre,
+            "Sector": sector,
+            "Asunto": asunto,
+            "Problema": problema
+        }
+        
+        # Mostrar el ticket
+        print("\n--- Ticket Generado ---")
+        print(f"Número de Ticket: {numero_ticket}")
+        print(f"Nombre: {nombre}")
+        print(f"Sector: {sector}")
+        print(f"Asunto: {asunto}")
+        print(f"Problema: {problema}")
+        print("\nPor favor, recuerde el número de su ticket.")
+        
+        # Preguntar si se desea crear otro ticket
+        otro = input("\n¿Desea crear otro ticket? (s/n): ").strip().lower()
+        if otro != "s":
+            break
+
+def leer_ticket():
+    """Permite buscar y mostrar un ticket por su número."""
+    while True:
+        print("\n--- Leer Ticket ---")
+        try:
+            numero_ticket = int(input("Ingrese el número de ticket: "))
+        except ValueError:
+            print("Por favor, ingrese un número válido.")
+            continue
+        
+        # Buscar y mostrar el ticket
+        ticket = tickets.get(numero_ticket)
+        if ticket:
+            print("\n--- Detalles del Ticket ---")
+            print(f"Número de Ticket: {numero_ticket}")
+            for clave, valor in ticket.items():
+                print(f"{clave}: {valor}")
+        else:
+            print("\nEl número de ticket ingresado no existe.")
+        
+        # Preguntar si se desea leer otro ticket
+        otro = input("\n¿Desea leer otro ticket? (s/n): ").strip().lower()
+        if otro != "s":
+            break
+
+def confirmar_salida():
+    """Confirma si el usuario desea salir del programa."""
+    confirmacion = input("¿Está seguro de que desea salir? (s/n): ").strip().lower()
+    return confirmacion == "s"
+
+# Iniciar el programa
+if __name__ == "__main__":
+    menu_principal()
